@@ -8,7 +8,7 @@ import pandas as pd
 application = Flask(__name__)
 app=application
 
-model= pickle.load(open('Model/decisiontreeRegressorModel','rb'))
+model= pickle.load(open('/config/workspace/Model/decisiontreeRegressorModel.pkl','rb'))
 
 # route for homepage
 
@@ -23,28 +23,30 @@ def predict_datapoint():
     result=""
 
     if request.method=='POST':
-        result=""
+        
 
-        if request.method=='POST':
-            MedInc=float(request.form.get('MedInc'))
-            HouseAge=float(request.form.get('HouseAge'))
-            AveRooms=float(request.form.get('AveRooms'))
-            AveBedrms=float(request.form.get('AveBedrms'))
-            Population=float(request.form.get('Population'))
-            AveOccup=float(request.form.get('AveOccup'))
-            Latitude=float(request.form.get('Latitude'))
-            Longitude=float(request.form.get('Longitude'))
+        
+        MedInc=float(request.form.get('MedInc'))
+        HouseAge=float(request.form.get('HouseAge'))
+        AveRooms=float(request.form.get('AveRooms'))
+        AveBedrms=float(request.form.get('AveBedrms'))
+        Population=float(request.form.get('Population'))
+        AveOccup=float(request.form.get('AveOccup'))
+        Latitude=float(request.form.get('Latitude'))
+        Longitude=float(request.form.get('Longitude'))
 
-            predict = model.predict(new_data)
+        new_data = [[MedInc,HouseAge,AveRooms,AveBedrms,Population,AveOccup,Latitude,Longitude]]
 
-            return render_template('singlePrediction.html',result=result)
+        predict = model.predict(new_data)
 
-        else:
-            return render_template('home.html')
+        return render_template('singlePrediction.html',result=predict)
+
+    else:
+        return render_template('home.html')
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")           
+    app.run(host="0.0.0.0",port=8000)           
 
 
 
